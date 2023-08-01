@@ -2,7 +2,6 @@ import { Subscription, UserDetails } from "@/types"
 import { User } from "@supabase/auth-helpers-nextjs"
 import { useSessionContext, useUser as useSuperUser } from "@supabase/auth-helpers-react"
 import { createContext, useContext, useEffect, useState } from "react"
-import { TbEPassport } from "react-icons/tb"
 
 type UserContextType = {
     accessToken: string | null
