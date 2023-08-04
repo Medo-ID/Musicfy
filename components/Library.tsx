@@ -5,6 +5,7 @@ import { useUser } from '@/hooks/useUser'
 import useUploadModal from '@/hooks/useUploadModal'
 import { Song } from '@/types'
 import MediaItem from './MediaItem'
+import useOnPlay from '@/hooks/useOnPlay'
 
 interface LibraryProps {
     songs: Song[]
@@ -14,6 +15,7 @@ const Library: React.FC<LibraryProps> = ({songs}) => {
     const authModal = useAuthModal()
     const uploadModal = useUploadModal()
     const { user } = useUser()
+    const onPlay = useOnPlay(songs)
     
     const onClickHandle = () =>{
         if(!user){
@@ -44,7 +46,7 @@ const Library: React.FC<LibraryProps> = ({songs}) => {
                 {songs.map((song) => (
                     <MediaItem
                         key={song.id}
-                        onClick={() => {}}
+                        onClick={(id: string) => onPlay(id)}
                         data={song}
                     />
                 ))}
