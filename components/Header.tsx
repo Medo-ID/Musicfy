@@ -11,6 +11,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react"
 import { useUser } from "@/hooks/useUser"
 import { FaUserAlt } from "react-icons/fa"
 import toast from 'react-hot-toast'
+import usePlayer from "@/hooks/usePlayer"
 
 interface HeaderProps {
   children: React.ReactNode
@@ -22,10 +23,12 @@ const Header: React.FC<HeaderProps> = ({children, className}) => {
     const authModal = useAuthModal()
     const supabaseClient = useSupabaseClient()
     const { user } = useUser()
+    const player = usePlayer()
 
     const handleLogout = async () => {
         const { error } = await supabaseClient.auth.signOut()
         //TODO: reset any playing songs
+        player.reset()
         router.refresh()
 
         if(error){
@@ -39,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({children, className}) => {
     return (
         <div 
             className={twMerge(
-                `h-fit bg-gradient-to-b from-emerald-800 p-6`,
+                `h-fit bg-gradient-to-b from-orange-800 p-6`,
                 className
             )}
         >
@@ -102,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({children, className}) => {
                             <div>
                                 <Button
                                     onClick={authModal.onOpen}
-                                    className="bg-transparent text-neutral-300 font-medium"
+                                    className="bg-transparent text-neutral-100 font-semibold"
                                 >
                                     Sign Up
                                 </Button>

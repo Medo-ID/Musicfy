@@ -7,7 +7,7 @@ import Box from "@/components/Box";
 const Loading = () => {
   return ( 
     <Box classname="h-full flex items-center justify-center">
-      <MoonLoader color="#22c55e" size={40} />
+      <MoonLoader color="rgb(234 88 12)" size={40} />
     </Box>
   );
 }

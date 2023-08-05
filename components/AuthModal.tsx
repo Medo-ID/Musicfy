@@ -47,8 +47,8 @@ const AuthModal = () => {
                         default: {
                             colors: {
                                 brand: '#404040',
-                                brandAccent: '#22c55e',
-                                dividerBackground: '#22c55e'
+                                brandAccent: 'rgb(234 88 12)',
+                                dividerBackground: 'rgb(234 88 12)'
                             },
                             radii: {
                                 borderRadiusButton: '5px',

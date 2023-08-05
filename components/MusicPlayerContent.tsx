@@ -1,5 +1,5 @@
 "use client"
-
+//@ts-ignore
 import useSound from "use-sound"
 import { Song } from "@/types"
 import MediaItem from "./MediaItem"
@@ -93,8 +93,8 @@ const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({song, songUrl}) 
     }
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 h-full">
-            <div className="flex w-full justify-start">
+        <div className="flex justify-between md:flex md:justify-around h-full">
+            <div className="flex w-full justify-start md:ml-5">
                 <div className="flex items-center gap-x-4">
                     <MediaItem data={song} />
                     <LikeButton songId={song.id} />
@@ -105,14 +105,14 @@ const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({song, songUrl}) 
             <div className="flex md:hidden col-auto w-full justify-end items-center">
                 <div
                     onClick={handlePlay}
-                    className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+                    className="h-10 w-10 flex items-center justify-center rounded-full bg-orange-600 p-1 cursor-pointer"
                 >
-                    <Icon size={30} className="text-black" />
+                    <Icon size={30} className="text-white" />
                 </div>
             </div>
             
             {/**Desktop view */}
-            <div className="hidden h-full md:flex w-full max-w-[722px] justify-end items-center gap-x-6">
+            <div className="hidden h-full md:flex w-full max-w-[722px] justify-center items-center gap-x-6">
                 
                 <AiFillStepBackward
                     onClick={onPlayPrevious}
@@ -122,9 +122,9 @@ const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({song, songUrl}) 
                 
                 <div
                     onClick={handlePlay}
-                    className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+                    className="h-10 w-10 flex items-center justify-center rounded-full bg-orange-600 p-1 cursor-pointer"
                 >
-                    <Icon size={30} className="text-black" />
+                    <Icon size={30} className="text-white" />
                 </div>
                 
                 <AiFillStepForward
@@ -135,7 +135,7 @@ const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({song, songUrl}) 
             
             </div>
 
-            <div className="hidden md:flex w-full justify-end pr-2">
+            <div className="hidden md:flex md:mr-5 w-full justify-end pr-2">
                 <div className="flex items-center gap-x-2 w-[120px]">
                     <VolumeIcon
                         onClick={toggleMute}

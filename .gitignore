@@ -4,6 +4,7 @@ password.txt
 /node_modules
 /.pnp
 .pnp.js
+stripe.exe
 
 # testing
 /coverage
