@@ -1,10 +1,9 @@
 import Header from "@/components/Header";
-
 import AccountContent from "./components/AccountContent";
 
-const Account = () => {
+export default function Account() {
   return (
-    <div 
+    <div
       className="
         bg-neutral-900 
         rounded-lg 
@@ -23,7 +22,5 @@ const Account = () => {
       </Header>
       <AccountContent />
     </div>
-  )
+  );
 }
-
-export default Account;

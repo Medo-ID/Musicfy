@@ -1,44 +1,48 @@
-import { useState, useEffect, useMemo } from "react"
-import { useSessionContext } from "@supabase/auth-helpers-react"
-import toast from "react-hot-toast"
+import { useState, useEffect, useMemo } from "react";
+import toast from "react-hot-toast";
 
-import { Song } from "@/types"
+import { Song } from "@/types";
+import { createClient } from "@/utils/supabase/client";
 
 const useGetSongById = (id?: string) => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [song, setSong] = useState<Song | undefined>(undefined)
-    const { supabaseClient } = useSessionContext()
+  const supabase = createClient();
 
-    useEffect(() => {
-        if(!id){
-            return
-        }
+  const [isLoading, setIsLoading] = useState(false);
+  const [song, setSong] = useState<Song | undefined>(undefined);
 
-        setIsLoading(true)
+  useEffect(() => {
+    if (!id) {
+      return;
+    }
 
-        const fetchSong = async () => {
-            const { data, error } = await supabaseClient
-            .from('songs')
-            .select('*')
-            .eq('id', id)
-            .single(); 
+    setIsLoading(true);
 
-            if(error){
-                setIsLoading(false)
-                return toast.error(error.message)
-            }
+    const fetchSong = async () => {
+      const { data, error } = await supabase
+        .from("songs")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-            setSong(data as Song)
-            setIsLoading(false)
-        }
+      if (error) {
+        setIsLoading(false);
+        return toast.error(error.message);
+      }
 
-        fetchSong()
-    }, [id, supabaseClient])
+      setSong(data as Song);
+      setIsLoading(false);
+    };
 
-    return useMemo(() => ({
-        isLoading,
-        song
-    }), [isLoading, song])
-}
+    fetchSong();
+  }, [id, supabase]);
 
-export default useGetSongById
+  return useMemo(
+    () => ({
+      isLoading,
+      song,
+    }),
+    [isLoading, song]
+  );
+};
+
+export default useGetSongById;
