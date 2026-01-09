@@ -3,7 +3,7 @@
 import { Song } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 
-export async function getSongs(): Promise<Song[]> {
+export async function getSongs(): Promise<Song[] | []> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -15,10 +15,14 @@ export async function getSongs(): Promise<Song[]> {
     console.log(error);
   }
 
-  return (data as any) || [];
+  if (!data) {
+    return [];
+  }
+
+  return data;
 }
 
-export async function getSongsByUser(): Promise<Song[]> {
+export async function getSongsByUser(): Promise<Song[] | []> {
   const supabase = await createClient();
 
   const { data: sessionData, error: sessionError } =
@@ -39,10 +43,14 @@ export async function getSongsByUser(): Promise<Song[]> {
     console.log(error.message);
   }
 
-  return (data as any) || [];
+  if (!data) {
+    return [];
+  }
+
+  return data;
 }
 
-export async function getSongsByTitle(title: string): Promise<Song[]> {
+export async function getSongsByTitle(title: string): Promise<Song[] | []> {
   const supabase = await createClient();
 
   if (!title) {
@@ -53,17 +61,21 @@ export async function getSongsByTitle(title: string): Promise<Song[]> {
   const { data, error } = await supabase
     .from("songs")
     .select("*")
-    .ilike("title", `%${title}`)
+    .ilike("title", `%${title}%`)
     .order("created_at", { ascending: false });
 
   if (error) {
     console.log(error.message);
   }
 
-  return (data as any) || [];
+  if (!data) {
+    return [];
+  }
+
+  return data;
 }
 
-export async function getLikedSong(): Promise<Song[]> {
+export async function getLikedSong(): Promise<Song[] | []> {
   const supabase = await createClient();
 
   const {

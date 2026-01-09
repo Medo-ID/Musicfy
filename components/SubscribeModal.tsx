@@ -2,14 +2,14 @@
 
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
-import useSubscribeModal from "@/hooks/useSubscribeModal";
+import { useSubscribeModal } from "@/hooks/useSubscribeModal";
 import { useUser } from "@/hooks/useUser";
 import { postData } from "@/libs/helpers";
 import { getStripe } from "@/libs/stripe-client";
 import { Price, ProductWithPrice } from "@/types";
 
-import Modal from "./Modal";
-import Button from "./Button";
+import { Modal } from "./ui/Modal";
+import { Button } from "./ui/Button";
 
 interface SubscribeModalProps {
   products: ProductWithPrice[];

@@ -1,15 +1,13 @@
-import { create } from "zustand"
+import { create } from "zustand";
 
-interface AuthModalStore{
-    isOpen: boolean
-    onOpen: () => void
-    onClose: () => void
+interface AuthModalStore {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
-const useAuthModal = create<AuthModalStore>((set) => ({
-    isOpen: false,
-    onOpen: () => set({ isOpen: true}),
-    onClose: () => set({ isOpen: false})
-}))
-
-export default useAuthModal
+export const useAuthModal = create<AuthModalStore>((set) => ({
+  isOpen: false,
+  onOpen: () => set({ isOpen: true }),
+  onClose: () => set({ isOpen: false }),
+}));

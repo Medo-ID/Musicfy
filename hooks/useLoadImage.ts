@@ -1,7 +1,7 @@
 import { Song } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
-const useLoadImage = (song: Song) => {
+export const useLoadImage = (song: Song) => {
   const supabase = createClient();
 
   if (!song) {
@@ -14,5 +14,3 @@ const useLoadImage = (song: Song) => {
 
   return imageData.publicUrl;
 };
-
-export default useLoadImage;

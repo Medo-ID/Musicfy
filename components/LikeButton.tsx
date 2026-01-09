@@ -1,6 +1,6 @@
 "use client";
 
-import useAuthModal from "@/hooks/useAuthModal";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { useUser } from "@/hooks/useUser";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
@@ -12,12 +12,11 @@ interface LikeButtonProps {
   songId: string;
 }
 
-const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
+export const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
   const supabase = createClient();
   const router = useRouter();
   const authModal = useAuthModal();
   const { user } = useUser();
-
   const [isLiked, setIsLiked] = useState<boolean>(false);
 
   useEffect(() => {
@@ -83,5 +82,3 @@ const LikeButton: React.FC<LikeButtonProps> = ({ songId }) => {
     </button>
   );
 };
-
-export default LikeButton;

@@ -4,15 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import useUploadModal from "@/hooks/useUploadModal";
+import { useUploadModal } from "@/hooks/useUploadModal";
 import { useUser } from "@/hooks/useUser";
 
-import Modal from "./Modal";
-import Input from "./Input";
-import Button from "./Button";
+import { Modal } from "./ui/Modal";
+import { Input } from "./ui/Input";
+import { Button } from "./ui/Button";
 import { createClient } from "@/utils/supabase/client";
 
-const UploadModal = () => {
+export const UploadModal = () => {
   const uploadModal = useUploadModal();
   const { user } = useUser();
   const supabase = createClient();
@@ -155,5 +155,3 @@ const UploadModal = () => {
     </Modal>
   );
 };
-
-export default UploadModal;

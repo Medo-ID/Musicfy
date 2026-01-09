@@ -1,4 +1,4 @@
-import Header from "@/components/Header";
+import { Header } from "@/components/Header";
 import Image from "next/image";
 import LikedContent from "./components/LikedContent";
 import { getLikedSong } from "@/actions/songs-actions";

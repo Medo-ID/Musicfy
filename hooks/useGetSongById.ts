@@ -1,10 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-
 import { Song } from "@/types";
 import { createClient } from "@/utils/supabase/client";
 
-const useGetSongById = (id?: string) => {
+export const useGetSongById = (id?: string) => {
   const supabase = createClient();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -44,5 +43,3 @@ const useGetSongById = (id?: string) => {
     [isLoading, song]
   );
 };
-
-export default useGetSongById;

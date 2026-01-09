@@ -10,7 +10,7 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onChange,
   title,
@@ -49,5 +49,3 @@ const Modal: React.FC<ModalProps> = ({
     </Dialog.Root>
   );
 };
-
-export default Modal;

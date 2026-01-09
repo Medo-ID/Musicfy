@@ -1,5 +1,5 @@
-import Header from "@/components/Header";
-import AccountContent from "./components/AccountContent";
+import { Header } from "@/components/Header";
+import { AccountContent } from "./components/AccountContent";
 
 export default function Account() {
   return (

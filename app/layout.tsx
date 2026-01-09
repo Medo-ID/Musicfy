@@ -1,11 +1,11 @@
-import Sidebar from "@/components/Sidebar";
+import { Sidebar } from "@/components/Sidebar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
-import UserProvider from "@/providers/UserProvider";
-import ModalProvider from "@/providers/ModalProvider";
-import ToasterProvider from "@/providers/ToasterProvider";
-import MusicPlayer from "@/components/MusicPlayer";
+import { UserProvider } from "@/providers/UserProvider";
+import { ModalProvider } from "@/providers/ModalProvider";
+import { ToasterProvider } from "@/providers/ToasterProvider";
+import { MusicPlayer } from "@/components/MusicPlayer";
 import { getActiveProductsWithPrices } from "@/actions/products-actions";
 import { getSongsByUser } from "@/actions/songs-actions";
 

@@ -2,13 +2,13 @@
 //@ts-ignore
 import useSound from "use-sound";
 import { Song } from "@/types";
-import MediaItem from "./MediaItem";
-import LikeButton from "./LikeButton";
+import { MediaItem } from "./MediaItem";
+import { LikeButton } from "./LikeButton";
 import { BsPauseFill, BsPlayFill } from "react-icons/bs";
 import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { HiSpeakerXMark, HiSpeakerWave } from "react-icons/hi2";
-import Slider from "./Slider";
-import usePlayer from "@/hooks/usePlayer";
+import { Slider } from "./ui/Slider";
+import { usePlayer } from "@/hooks/usePlayer";
 import { useState, useEffect } from "react";
 
 interface MusicPlayerContentProps {
@@ -16,7 +16,7 @@ interface MusicPlayerContentProps {
   songUrl: string;
 }
 
-const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
+export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
   song,
   songUrl,
 }) => {
@@ -146,5 +146,3 @@ const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
     </div>
   );
 };
-
-export default MusicPlayerContent;

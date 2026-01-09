@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
 
   if (!user && !request.nextUrl.pathname.startsWith("/")) {
-    // no user, potentially respond by redirecting the user to the login page
+    // no user, potentially respond by redirecting the user to the home page
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);

@@ -4,9 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-
-import Modal from "./Modal";
-import useAuthModal from "@/hooks/useAuthModal";
+import { Modal } from "./ui/Modal";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { createClient } from "@/utils/supabase/client";
 
 const AuthModal = () => {
