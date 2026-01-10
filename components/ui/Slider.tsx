@@ -7,19 +7,21 @@ interface SliderProps {
   onChange?: (value: number) => void;
 }
 
-export const Slider: React.FC<SliderProps> = ({ value = 1, onChange }) => {
+export const Slider: React.FC<
+  SliderProps & { max?: number; step?: number }
+> = ({ value = 1, onChange, max = 1, step = 0.1 }) => {
   const handleOnChange = (newValue: number[]) => {
     onChange?.(newValue[0]);
   };
 
   return (
     <RadixSlider.Root
-      className="relative flex items-center select-none touch-none w-full h-10"
+      className="relative flex items-center select-none touch-none w-full h-2"
       defaultValue={[1]}
       value={[value]}
       onValueChange={handleOnChange}
-      max={1}
-      step={0.1}
+      max={max}
+      step={step}
       aria-label="Valume"
     >
       <RadixSlider.Track className="bg-neutral-600 relative grow rounded-full h-[3px]">

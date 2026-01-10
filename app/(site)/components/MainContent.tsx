@@ -8,7 +8,7 @@ interface MainContentProps {
   songs: Song[];
 }
 
-const MainContent: React.FC<MainContentProps> = ({ songs }) => {
+export function MainContent({ songs }: MainContentProps) {
   const onPlay = useOnPlay(songs);
 
   if (songs.length === 0) {
@@ -40,6 +40,4 @@ const MainContent: React.FC<MainContentProps> = ({ songs }) => {
       ))}
     </div>
   );
-};
-
-export default MainContent;
+}

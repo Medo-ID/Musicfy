@@ -2,8 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body, :root{
+html,
+body,
+:root {
   height: 100%;
   background-color: black;
   color-scheme: dark;
+}
+
+.sliding-animation {
+  /* Only animate if there is a distance to move */
+  animation: slide-back-forth 30s linear infinite;
+  display: inline-block;
+  will-change: transform; /* Hint to the browser for GPU optimization */
+}
+
+@keyframes slide-back-forth {
+  0%,
+  10% {
+    transform: translateX(0);
+  } /* Pause at start */
+  45%,
+  55% {
+    transform: translateX(var(--move-distance, 0));
+  } /* Stop at the end */
+  90%,
+  100% {
+    transform: translateX(0);
+  } /* Return to start */
+}
+
+/* Accessibility: Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .sliding-animation {
+    animation: none;
+    text-overflow: ellipsis;
+  }
 }

@@ -23,6 +23,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
   const player = usePlayer();
   const [volume, setVolume] = useState<number>(1);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [seconds, setSeconds] = useState(0);
 
   const Icon = isPlaying ? BsPauseFill : BsPlayFill;
   const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
@@ -57,7 +58,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
     player.setId(previousSong);
   };
 
-  const [play, { pause, sound }] = useSound(songUrl, {
+  const [play, { pause, sound, duration }] = useSound(songUrl, {
     volume: volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
@@ -76,6 +77,16 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
     };
   }, [sound]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (sound && isPlaying) {
+        setSeconds(sound.seek()); // sound.seek() gets current position in seconds
+      }
+    }, 1000); // Update every second
+
+    return () => clearInterval(interval);
+  }, [sound, isPlaying]);
+
   const handlePlay = () => {
     if (!isPlaying) {
       play();
@@ -92,57 +103,111 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
     }
   };
 
+  const handleSeek = (value: number) => {
+    setSeconds(value);
+    sound?.seek(value); // Move the "play head" to the new position
+  };
+
+  // Convert duration from ms to seconds
+  const durationInSeconds = duration ? duration / 1000 : 0;
+
   return (
-    <div className="flex justify-between md:flex md:justify-around h-full">
-      <div className="flex w-full justify-start md:ml-5">
-        <div className="flex items-center gap-x-4">
-          <MediaItem data={song} />
-          <LikeButton songId={song.id} />
+    <div className="flex flex-col h-full w-full px-2 md:px-5">
+      {/* Main Controls Row */}
+      <div className="flex justify-between items-center h-full w-full">
+        {/* 1. Left: Media Info (Desktop & Mobile) */}
+        <div className="flex w-full justify-start overflow-hidden min-w-[150px]">
+          <div className="flex items-center gap-x-4 max-w-full">
+            <MediaItem data={song} />
+            <div className="hidden sm:block">
+              <LikeButton songId={song.id} />
+            </div>
+          </div>
+        </div>
+
+        {/* 2. Center: Playback Controls (Desktop Only) */}
+        <div className="hidden md:flex flex-col items-center justify-center w-full max-w-[400px] lg:max-w-[600px] gap-y-2">
+          <div className="flex items-center gap-x-6">
+            <AiFillStepBackward
+              onClick={onPlayPrevious}
+              size={24}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+            <div
+              onClick={handlePlay}
+              className="h-9 w-9 flex items-center justify-center rounded-full bg-orange-600 cursor-pointer hover:scale-105 transition"
+            >
+              <Icon size={24} className="text-white" />
+            </div>
+            <AiFillStepForward
+              onClick={onPlayNext}
+              size={24}
+              className="text-neutral-400 cursor-pointer hover:text-white transition"
+            />
+          </div>
+
+          {/* Timeline Desktop */}
+          <div className="flex items-center gap-x-3 w-full">
+            <span className="text-[10px] text-neutral-400 min-w-[35px] text-right">
+              {formatTime(seconds)}
+            </span>
+            <Slider
+              value={seconds}
+              max={durationInSeconds}
+              step={1}
+              onChange={handleSeek}
+            />
+            <span className="text-[10px] text-neutral-400 min-w-[35px]">
+              {formatTime(durationInSeconds)}
+            </span>
+          </div>
+        </div>
+
+        {/* 3. Right: Volume (Desktop) / Play Button (Mobile) */}
+        <div className="flex w-full justify-end items-center">
+          {/* Desktop Volume */}
+          <div className="hidden md:flex items-center gap-x-2 w-[120px]">
+            <VolumeIcon
+              onClick={toggleMute}
+              className="cursor-pointer text-neutral-400 hover:text-white"
+              size={25}
+            />
+            <Slider value={volume} onChange={(value) => setVolume(value)} />
+          </div>
+
+          {/* Mobile Mini-Controls */}
+          <div className="flex md:hidden items-center gap-x-3">
+            <LikeButton songId={song.id} />
+            <div
+              onClick={handlePlay}
+              className="h-10 w-10 flex items-center justify-center rounded-full bg-white p-1 cursor-pointer"
+            >
+              <Icon size={30} className="text-black" />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/**Mobile view */}
-      <div className="flex md:hidden col-auto w-full justify-end items-center">
-        <div
-          onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center rounded-full bg-orange-600 p-1 cursor-pointer"
-        >
-          <Icon size={30} className="text-white" />
-        </div>
-      </div>
-
-      {/**Desktop view */}
-      <div className="hidden h-full md:flex w-full max-w-[722px] justify-center items-center gap-x-6">
-        <AiFillStepBackward
-          onClick={onPlayPrevious}
-          size={30}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
+      {/* 4. Bottom: Timeline (Mobile Only) */}
+      <div className="md:hidden flex flex-col w-full pb-2 px-1">
+        <Slider
+          value={seconds}
+          max={durationInSeconds}
+          step={1}
+          onChange={handleSeek}
         />
-
-        <div
-          onClick={handlePlay}
-          className="h-10 w-10 flex items-center justify-center rounded-full bg-orange-600 p-1 cursor-pointer"
-        >
-          <Icon size={30} className="text-white" />
-        </div>
-
-        <AiFillStepForward
-          onClick={onPlayNext}
-          size={30}
-          className="text-neutral-400 cursor-pointer hover:text-white transition"
-        />
-      </div>
-
-      <div className="hidden md:flex md:mr-5 w-full justify-end pr-2">
-        <div className="flex items-center gap-x-2 w-[120px]">
-          <VolumeIcon
-            onClick={toggleMute}
-            className="cursor-pointer"
-            size={30}
-          />
-          <Slider value={volume} onChange={(value) => setVolume(value)} />
+        <div className="flex justify-between w-full text-[10px] text-neutral-400 -mt-1">
+          <span>{formatTime(seconds)}</span>
+          <span>{formatTime(durationInSeconds)}</span>
         </div>
       </div>
     </div>
   );
+};
+
+// Helper to format 75 seconds into "1:15"
+const formatTime = (secs: number) => {
+  const minutes = Math.floor(secs / 60);
+  const seconds = Math.floor(secs % 60);
+  return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };

@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ children, songs }) => {
         </Box>
       </div>
 
-      <main className="h-full flex-1 overflow-y-auto py-2 pr-2">
+      <main className="h-full flex-1 overflow-y-auto py-2 px-2 md:pl-0">
         {children}
       </main>
     </div>

@@ -9,7 +9,7 @@ interface SearchContentProps {
   songs: Song[];
 }
 
-const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
+export function SearchContent({ songs }: SearchContentProps) {
   const onPlay = useOnPlay(songs);
 
   if (songs.length === 0) {
@@ -31,6 +31,4 @@ const SearchContent: React.FC<SearchContentProps> = ({ songs }) => {
       ))}
     </div>
   );
-};
-
-export default SearchContent;
+}
