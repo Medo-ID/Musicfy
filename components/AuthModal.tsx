@@ -14,16 +14,14 @@ const AuthModal = () => {
   const { onClose, isOpen } = useAuthModal();
 
   useEffect(() => {
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        router.refresh(); // re-fetch server components
         onClose();
+        router.refresh();
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => data.subscription.unsubscribe();
   }, [supabase, router, onClose]);
 
   const onChange = (open: boolean) => {

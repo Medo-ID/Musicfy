@@ -116,7 +116,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
       {/* Main Controls Row */}
       <div className="flex justify-between items-center h-full w-full">
         {/* 1. Left: Media Info (Desktop & Mobile) */}
-        <div className="flex w-full justify-start overflow-hidden min-w-[150px]">
+        <div className="flex w-full justify-start overflow-hidden min-w-37.5">
           <div className="flex items-center gap-x-4 max-w-full">
             <MediaItem data={song} />
             <div className="hidden sm:block">
@@ -126,7 +126,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
         </div>
 
         {/* 2. Center: Playback Controls (Desktop Only) */}
-        <div className="hidden md:flex flex-col items-center justify-center w-full max-w-[400px] lg:max-w-[600px] gap-y-2">
+        <div className="hidden md:flex flex-col items-center justify-center w-full max-w-100 lg:max-w-150 gap-y-2">
           <div className="flex items-center gap-x-6">
             <AiFillStepBackward
               onClick={onPlayPrevious}
@@ -148,7 +148,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
 
           {/* Timeline Desktop */}
           <div className="flex items-center gap-x-3 w-full">
-            <span className="text-[10px] text-neutral-400 min-w-[35px] text-right">
+            <span className="text-[10px] text-neutral-400 min-w-8.75 text-right">
               {formatTime(seconds)}
             </span>
             <Slider
@@ -157,7 +157,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
               step={1}
               onChange={handleSeek}
             />
-            <span className="text-[10px] text-neutral-400 min-w-[35px]">
+            <span className="text-[10px] text-neutral-400 min-w-8.75">
               {formatTime(durationInSeconds)}
             </span>
           </div>
@@ -166,7 +166,7 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
         {/* 3. Right: Volume (Desktop) / Play Button (Mobile) */}
         <div className="flex w-full justify-end items-center">
           {/* Desktop Volume */}
-          <div className="hidden md:flex items-center gap-x-2 w-[120px]">
+          <div className="hidden md:flex items-center gap-x-2 w-30">
             <VolumeIcon
               onClick={toggleMute}
               className="cursor-pointer text-neutral-400 hover:text-white"

@@ -2,7 +2,7 @@
 
 import { Toaster } from "react-hot-toast";
 
-export const ToasterProvider = () => {
+export function ToasterProvider() {
   return (
     <Toaster
       toastOptions={{
@@ -14,4 +14,4 @@ export const ToasterProvider = () => {
       }}
     />
   );
-};
+}

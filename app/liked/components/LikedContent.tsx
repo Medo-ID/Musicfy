@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { FaPlay } from "react-icons/fa";
-import { BsShuffle } from "react-icons/bs";
+import { BsPlayFill, BsShuffle } from "react-icons/bs";
 
 import { Song } from "@/types";
 import { useUser } from "@/hooks/useUser";
@@ -18,23 +17,18 @@ interface LikedContentProps {
 
 export function LikedContent({ songs }: LikedContentProps) {
   const router = useRouter();
-  const authModal = useAuthModal();
+  const { isOpen, onOpen } = useAuthModal();
   const { isLoading, user } = useUser();
-  const [isMounted, setIsMounted] = useState(false);
 
   // hook likely handles the global player queue
   const onPlay = useOnPlay(songs);
 
   useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  useEffect(() => {
     if (!isLoading && !user) {
       router.replace("/");
-      authModal.onOpen();
+      onOpen();
     }
-  }, [isLoading, user, router, authModal]);
+  }, [isLoading, user, router, isOpen, onOpen]);
 
   const handlePlay = (id?: string) => {
     // Play from the beginning or a specific ID
@@ -46,8 +40,6 @@ export function LikedContent({ songs }: LikedContentProps) {
     // Logic should pass the shuffled array to your player's queue state
     onPlay(shuffled[0].id);
   };
-
-  if (!isMounted) return null;
 
   if (songs.length === 0) {
     return (
@@ -61,23 +53,19 @@ export function LikedContent({ songs }: LikedContentProps) {
     <div className="flex flex-col gap-y-2 w-full p-6">
       {/* Action Header: Modern UI Pattern */}
       <div className="flex items-center gap-x-4 mb-8">
-        <button
+        <div
           onClick={() => handlePlay()}
-          className="transition rounded-full flex items-center justify-center bg-orange-600 cursor-pointer hover:scale-105 p-4 group"
-          aria-label="Play All"
+          className="h-12 w-12 flex items-center justify-center rounded-full bg-orange-600 cursor-pointer hover:scale-105 transition"
         >
-          <FaPlay
-            className="text-black group-hover:scale-105 transition"
-            size={20}
-          />
-        </button>
-        <button
+          <BsPlayFill size={32} className="text-white" />
+        </div>
+        <div
           onClick={handleShuffle}
-          className="transition flex items-center justify-center text-neutral-400 hover:text-white"
+          className="transition flex items-center justify-center text-neutral-400 hover:text-white cursor-pointer"
           aria-label="Shuffle"
         >
-          <BsShuffle size={24} />
-        </button>
+          <BsShuffle size={32} />
+        </div>
       </div>
 
       {/* Song List */}

@@ -16,7 +16,7 @@ export const MusicPlayer = () => {
 
   return (
     <div className="fixed bottom-0 bg-black w-full py-2 px-2">
-      <MusicPlayerContent key={songUrl} song={song} songUrl={songUrl} />
+      <MusicPlayerContent key={song.id} song={song} songUrl={songUrl} />
     </div>
   );
 };

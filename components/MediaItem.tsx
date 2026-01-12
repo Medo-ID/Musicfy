@@ -56,7 +56,7 @@ export const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
       onClick={handleOnClick}
       className="flex items-center gap-x-3 cursor-pointer hover:bg-neutral-800/50 w-full p-2 rounded-md"
     >
-      <div className="relative rounded-md min-h-[48px] min-w-[48px] overflow-hidden">
+      <div className="relative rounded-md min-h-12 min-w-12 overflow-hidden">
         <Image
           src={imageURL || "/images/music-placeholder.png"}
           alt="Media Item Image"
@@ -66,7 +66,7 @@ export const MediaItem: React.FC<MediaItemProps> = ({ data, onClick }) => {
           loading="eager"
         />
       </div>
-      <div className="flex flex-col gap-y-1 overflow-hidden max-w-[200px] md:max-w-[365px]">
+      <div className="flex flex-col gap-y-1 overflow-hidden max-w-50 md:max-w-91.25">
         <p
           ref={titleRef}
           className="text-white text-sm whitespace-nowrap sliding-animation"

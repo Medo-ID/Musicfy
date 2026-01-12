@@ -24,10 +24,9 @@ export const Library: React.FC<LibraryProps> = ({ songs }) => {
       return authModal.onOpen();
     }
 
-    //TODO: CHECK FOR SUBSCRIPTION
-    // if (!subscription) {
-    //   return subscribeModal.onOpen();
-    // }
+    if (!subscription) {
+      return subscribeModal.onOpen();
+    }
 
     return uploadModal.onOpen();
   };

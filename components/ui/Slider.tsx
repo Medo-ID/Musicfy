@@ -24,7 +24,7 @@ export const Slider: React.FC<
       step={step}
       aria-label="Valume"
     >
-      <RadixSlider.Track className="bg-neutral-600 relative grow rounded-full h-[3px]">
+      <RadixSlider.Track className="bg-neutral-600 relative grow rounded-full h-0.75">
         <RadixSlider.Range className="absolute bg-orange-500 rounded-full h-full" />
       </RadixSlider.Track>
       <RadixSlider.Thumb
