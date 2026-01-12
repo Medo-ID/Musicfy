@@ -5,6 +5,8 @@ password.txt
 /node_modules
 /.pnp
 .pnp.js
+
+# Ignore the Stripe CLI executable
 stripe.exe
 
 # testing
