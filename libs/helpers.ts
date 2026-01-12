@@ -42,3 +42,13 @@ export const toDateTime = (secs: number) => {
   t.setSeconds(secs);
   return t;
 };
+
+export function setPlayerCookie(data: {
+  activeId?: string;
+  ids?: string[];
+  volume?: number;
+}) {
+  document.cookie = `player=${encodeURIComponent(
+    JSON.stringify(data)
+  )}; path=/; max-age=2592000; samesite=lax`;
+}

@@ -9,7 +9,8 @@ import { AiFillStepBackward, AiFillStepForward } from "react-icons/ai";
 import { HiSpeakerXMark, HiSpeakerWave } from "react-icons/hi2";
 import { Slider } from "./ui/Slider";
 import { usePlayer } from "@/hooks/usePlayer";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { setPlayerCookie } from "@/libs/helpers";
 
 interface MusicPlayerContentProps {
   song: Song;
@@ -21,53 +22,41 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
   songUrl,
 }) => {
   const player = usePlayer();
+
+  // Local UI state
   const [volume, setVolume] = useState<number>(1);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [seconds, setSeconds] = useState(0);
 
-  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
-  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
-
-  const onPlayNext = () => {
-    if (player.ids.length === 0) {
-      return;
-    }
-
-    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const nextSong = player.ids[currentIndex + 1];
-
-    if (!nextSong) {
-      return player.setId(player.ids[0]);
-    }
-
-    player.setId(nextSong);
-  };
-
-  const onPlayPrevious = () => {
-    if (player.ids.length === 0) {
-      return;
-    }
-
-    const currentIndex = player.ids.findIndex((id) => id === player.activeId);
-    const previousSong = player.ids[currentIndex - 1];
-
-    if (!previousSong) {
-      return player.setId(player.ids[player.ids.length - 1]);
-    }
-
-    player.setId(previousSong);
-  };
+  // Track whether the user (or autoplay-next) intends playback.
+  // This prevents options changes (like volume) from auto-starting playback.
+  const hasUserPlayedRef = useRef(false);
 
   const [play, { pause, sound, duration }] = useSound(songUrl, {
-    volume: volume,
+    volume,
     onplay: () => setIsPlaying(true),
     onend: () => {
       setIsPlaying(false);
+      // Ensure next track will autoplay because this one ended while playing
+      hasUserPlayedRef.current = true;
       onPlayNext();
     },
-    onpause: () => setIsPlaying(false),
+    onpause: () => {
+      setIsPlaying(false);
+      // user paused; clear intent
+      hasUserPlayedRef.current = false;
+    },
     format: ["mp3"],
   });
+
+  // Keep cookie in sync (server reads this on refresh)
+  useEffect(() => {
+    setPlayerCookie({
+      activeId: player.activeId,
+      ids: player.ids,
+      volume,
+    });
+  }, [player.activeId, player.ids, volume]);
 
   useEffect(() => {
     sound?.play();
@@ -78,38 +67,74 @@ export const MusicPlayerContent: React.FC<MusicPlayerContentProps> = ({
   }, [sound]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (sound && isPlaying) {
-        setSeconds(sound.seek()); // sound.seek() gets current position in seconds
-      }
-    }, 1000); // Update every second
+    if (!sound || !isPlaying) return;
 
-    return () => clearInterval(interval);
+    const id = setInterval(() => {
+      setSeconds(sound.seek());
+    }, 1000);
+
+    return () => clearInterval(id);
   }, [sound, isPlaying]);
 
   const handlePlay = () => {
-    if (!isPlaying) {
-      play();
-    } else {
+    // mark intent and toggle
+    if (isPlaying) {
+      // pausing: remove intent
+      hasUserPlayedRef.current = false;
       pause();
+    } else {
+      hasUserPlayedRef.current = true;
+      play();
     }
   };
 
   const toggleMute = () => {
-    if (volume === 0) {
-      setVolume(1);
-    } else {
-      setVolume(0);
-    }
+    const next = volume === 0 ? 1 : 0;
+    setVolume(next);
+    player.setVolume(next);
+  };
+
+  const handleVolumeChange = (value: number) => {
+    // only update volume and player store; do NOT set play intent
+    setVolume(value);
+    player.setVolume(value);
   };
 
   const handleSeek = (value: number) => {
     setSeconds(value);
-    sound?.seek(value); // Move the "play head" to the new position
+    sound?.seek(value);
   };
 
-  // Convert duration from ms to seconds
+  const onPlayNext = () => {
+    if (!player.ids.length) return;
+
+    // if currently playing, ensure next track should autoplay
+    hasUserPlayedRef.current = isPlaying;
+
+    const index = player.ids.indexOf(player.activeId!);
+    player.setId(player.ids[index + 1] ?? player.ids[0]);
+  };
+
+  const onPlayPrevious = () => {
+    if (!player.ids.length) return;
+
+    hasUserPlayedRef.current = isPlaying;
+
+    const index = player.ids.indexOf(player.activeId!);
+    player.setId(player.ids[index - 1] ?? player.ids[player.ids.length - 1]);
+  };
+
+  // Keep local UI volume in sync with player store (set by cookie on initial load)
+  useEffect(() => {
+    if (typeof player.volume === "number" && player.volume !== volume) {
+      setVolume(player.volume);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [player.volume]);
+
   const durationInSeconds = duration ? duration / 1000 : 0;
+  const Icon = isPlaying ? BsPauseFill : BsPlayFill;
+  const VolumeIcon = volume === 0 ? HiSpeakerXMark : HiSpeakerWave;
 
   return (
     <div className="flex flex-col h-full w-full px-2 md:px-5">

@@ -8,6 +8,7 @@ import { ToasterProvider } from "@/providers/ToasterProvider";
 import { MusicPlayer } from "@/components/MusicPlayer";
 import { getActiveProductsWithPrices } from "@/actions/products-actions";
 import { getSongsByUser } from "@/actions/songs-actions";
+import { cookies } from "next/headers";
 
 const font = Figtree({ subsets: ["latin"] });
 
@@ -16,6 +17,17 @@ export const metadata: Metadata = {
   description: "Listen and discover music!",
 };
 
+async function getPlayerFromCookies() {
+  const cookie = (await cookies()).get("player")?.value;
+  if (!cookie) return null;
+
+  try {
+    return JSON.parse(decodeURIComponent(cookie));
+  } catch {
+    return null;
+  }
+}
+
 export default async function RootLayout({
   children,
 }: {
@@ -23,6 +35,7 @@ export default async function RootLayout({
 }) {
   const userSongs = await getSongsByUser();
   const products = await getActiveProductsWithPrices();
+  const playerState = await getPlayerFromCookies();
 
   return (
     <html lang="en">
@@ -31,7 +44,7 @@ export default async function RootLayout({
         <UserProvider>
           <ModalProvider products={products} />
           <Sidebar songs={userSongs}>{children}</Sidebar>
-          <MusicPlayer />
+          <MusicPlayer initialPlayerState={playerState} />
         </UserProvider>
       </body>
     </html>
