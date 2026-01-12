@@ -171,17 +171,17 @@ CREATE TABLE public.users (
 
 You must have active accounts with:
 
-- Supabase:
+Supabase:
 
-* Authentication enabled
-* PostgreSQL database
-* Row Level Security (RLS) policies
-* Auth trigger to populate public.users
+- Authentication enabled
+- PostgreSQL database
+- Row Level Security (RLS) policies
+- Auth trigger to populate public.users
 
-- Stripe
+Stripe
 
-* Products and recurring prices
-* Webhooks enabled
+- Products and recurring prices
+- Webhooks enabled
 
 ## ⚙️ Environment Configuration
 
